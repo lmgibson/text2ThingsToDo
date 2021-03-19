@@ -2,11 +2,12 @@ from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from msrest.authentication import CognitiveServicesCredentials
 
-import secrets
-
 import sys
+import re
 import time
 import webbrowser
+import urllib
+import secrets
 
 
 def processImage(image, computervision_client):
@@ -32,40 +33,61 @@ def processImage(image, computervision_client):
         time.sleep(1)
 
     # Print results, line by line into a dictionary
-    results = {}
+    results = []
     if recognize_handwriting_result.status == OperationStatusCodes.succeeded:
         for text_result in recognize_handwriting_result.analyze_result.read_results:
-            for idx, line in enumerate(text_result.lines):
-                results[idx] = line.text
+            for line in text_result.lines:
+                results.append(line.text)
 
     return results
 
 
-def createThingsURL():
-    # Create Things URL
-    for i in textDict:
-        if i > 0:
-            webbrowser.open("things:///add?title=tmpTitle&notes=%s" %
-                            (textDict[i]))
+def createThingsURL(parseDict):
+    # Extracting elements
+    htmls = []
+    for idx, ToDo in enumerate(parseDict):
+        for i in ToDo:
+            ToDo[i] = urllib.parse.quote_plus(ToDo[i])
+        html = "things:///add?" + urllib.parse.urlencode(ToDo)
+        htmls.append(html)
+
+    return htmls
+
+
+def findStartOfNotes(textList):
+    notesStart = None
+    for idx, i in enumerate(textList):
+        if i.lower().replace(" ", "").startswith('tothings'):
+            notesStart = idx
+        else:
+            pass
+    return notesStart
+
+
+def sendToThings(textList):
+    # Find start of notes
+    notesStart = findStartOfNotes(textList)
+
+    # Parse notes
+    parseDict = []
+    i = 0
+    j = -1
+
+    for i in range(0, len(textList)):
+        if re.search('^[0-9]', textList[i].lower().replace(" ", "")):
+            parseDict.append({'title': textList[i]})
+            j += 1
+        elif re.search('^\-', textList[i]):
+            parseDict[j]['checklist-items'] = textList[i]
         else:
             pass
 
+    # Create URLs
+    htmls = createThingsURL(parseDict)
 
-def sendToThings(textDict):
-    # Print results
-    for i in textDict:
-        print("Line %s: %s" % (i, textDict[i]))
-
-    response = input("Does that look okay?[yes/no]\n").lower()
-
-    if response == "yes":
-        createThingsURL()
-    elif response == "no":
-        print("I'm sorry. I'm only a machine.")
-        exit()
-    else:
-        "Please answer yes or no."
-        sendToThings(textDict)
+    # Send to things
+    for i in htmls:
+        webbrowser.open(i)
 
 
 if __name__ == '__main__':
@@ -79,5 +101,5 @@ if __name__ == '__main__':
 
     # Evaluating Image
     local_image_path = sys.argv[1]
-    textDict = processImage(local_image_path, computervision_client)
-    sendToThings(textDict)
+    textList = processImage(local_image_path, computervision_client)
+    sendToThings(textList)
