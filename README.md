@@ -15,7 +15,7 @@ The program will parse notes of the above format and add them to your Things3 to
 
 # How to Use
 
-Currently, you can use the program at the command line. Download hte code contained in src and simply run:
+To use the program you will need to spin up a free-tier Azure Cognitive Services Computer Vision resource. Currently, you can use the program at the command line. Download the code contained in src and simply run:
 
 ```
 python src/processText.py '/path/to/your/imageFile'
