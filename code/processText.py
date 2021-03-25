@@ -7,7 +7,7 @@ import re
 import time
 import webbrowser
 import urllib
-import secrets
+import projectSecrets
 import utilities
 
 

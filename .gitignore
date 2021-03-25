@@ -1,4 +1,4 @@
 env
-secrets*
+projectSecrets*
 .vscode
 __pycache__

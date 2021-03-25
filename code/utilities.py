@@ -1,23 +1,18 @@
-from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
-from msrest.authentication import CognitiveServicesCredentials
-
-import sys
 import re
 import time
 import webbrowser
 import urllib
-import secrets
 
 
 def processImage(image, computervision_client):
     print("===== Batch Read - local =====")
     # Open local image file
-    local_image_handwritten = open(image, "rb")
+    # local_image_handwritten = open(image, "rb")
 
     # Call API with image and raw response (allows you to get the operation location)
-    recognize_handwriting_results = computervision_client.read_in_stream(
-        local_image_handwritten, raw=True)
+    recognize_handwriting_results = computervision_client.read(
+        image, raw=True)
 
     # Get the operation location (URL with ID as last appendage)
     operation_location_local = recognize_handwriting_results.headers["Operation-Location"]
@@ -84,8 +79,7 @@ def sendToThings(textList):
 
     # Create URLs
     htmls = createThingsURL(parseDict)
-
+    return htmls
     # Send to things
-    for i in htmls:
-        print(i)
-        # webbrowser.open(i)
+    # for i in htmls:
+    # webbrowser.open(i)
