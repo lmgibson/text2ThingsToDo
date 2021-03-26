@@ -1,14 +1,10 @@
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
-from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from msrest.authentication import CognitiveServicesCredentials
 
-import os
-from io import BytesIO
 import processText
 import projectSecrets
 import utilities
 import streamlit as st
-from PIL import Image
 import webbrowser
 
 
@@ -26,7 +22,7 @@ if __name__ == '__main__':
         computervision_client = ComputerVisionClient(
             endpoint, CognitiveServicesCredentials(subscription_key))
 
-        # Evaluating Image
+        # Processing Image
         textList = processText.processImage(
             uploaded_file, computervision_client)
         results = utilities.sendToThings(textList)

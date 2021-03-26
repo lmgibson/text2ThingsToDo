@@ -1,5 +1,4 @@
 import re
-import webbrowser
 import urllib
 
 
@@ -46,6 +45,3 @@ def sendToThings(textList):
     # Create URLs
     htmls = createThingsURL(parseDict)
     return htmls
-    # Send to things
-    # for i in htmls:
-    # webbrowser.open(i)
