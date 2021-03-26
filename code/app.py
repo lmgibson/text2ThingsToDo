@@ -3,10 +3,14 @@ from azure.cognitiveservices.vision.computervision.models import OperationStatus
 from msrest.authentication import CognitiveServicesCredentials
 
 import os
+from io import BytesIO
+import processText
 import projectSecrets
 import utilities
 import streamlit as st
 from PIL import Image
+import webbrowser
+
 
 if __name__ == '__main__':
     st.markdown("""
@@ -22,13 +26,15 @@ if __name__ == '__main__':
         computervision_client = ComputerVisionClient(
             endpoint, CognitiveServicesCredentials(subscription_key))
 
-        # Prepping Image
-        image = Image.open(uploaded_file)
-        st.text(type(image))
-
         # Evaluating Image
-        textList = utilities.processImage(image, computervision_client)
+        textList = processText.processImage(
+            uploaded_file, computervision_client)
         results = utilities.sendToThings(textList)
 
-        for i in results:
-            st.text(i)
+        st.text("Found the following text:")
+        st.write(textList)
+
+        if st.button("Click to upload."):
+            for i in results:
+                webbrowser.open(i)
+            st.text("Uploaded.")
