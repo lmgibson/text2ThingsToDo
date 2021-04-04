@@ -10,7 +10,7 @@ import os
 
 
 if __name__ == '__main__':
-    if st.text_input("Password:", value="", type="password") == os.environ["USER"]:
+    if st.text_input("Password:", value="", type="password") == os.environ["APPPASS"]:
         st.markdown("""
                     # Handwritten todos to Things todos
                     """)
