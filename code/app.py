@@ -27,10 +27,7 @@ if __name__ == '__main__':
             uploaded_file, computervision_client)
         results = utilities.sendToThings(textList)
 
-        st.text("Found the following text:")
-        st.write(textList)
-
-        if st.button("Click to upload."):
+        if st.button("Completed conversion. Click to upload."):
             for i in results:
                 webbrowser.open(i)
             st.text("Uploaded.")

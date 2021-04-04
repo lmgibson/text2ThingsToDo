@@ -1,14 +1,12 @@
 import re
-import urllib
+from urllib import parse
 
 
 def createThingsURL(parseDict):
     # Extracting elements
     htmls = []
     for idx, ToDo in enumerate(parseDict):
-        for i in ToDo:
-            ToDo[i] = urllib.parse.quote_plus(ToDo[i])
-        html = "things:///add?" + urllib.parse.urlencode(ToDo)
+        html = "things:///add?" + parse.urlencode(ToDo, quote_via=parse.quote)
         htmls.append(html)
 
     return htmls
