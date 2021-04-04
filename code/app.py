@@ -10,7 +10,7 @@ import webbrowser
 
 if __name__ == '__main__':
     st.markdown("""
-                # Paper todo to Things3
+                # Handwritten todos to Things todos
                 """)
     uploaded_file = st.file_uploader("First choose an image...", type="jpg")
 
