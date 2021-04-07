@@ -5,7 +5,6 @@ import processText
 import projectSecrets
 import utilities
 import streamlit as st
-import webbrowser
 import os
 
 
@@ -16,7 +15,7 @@ if __name__ == '__main__':
                     """)
 
         uploaded_file = st.file_uploader(
-            "First choose an image...", type="jpg")
+            "Upload an image (png or jpg)", type=['png', 'jpg'])
 
         if uploaded_file is not None:
             # Authentication and Variable Creation
@@ -31,6 +30,7 @@ if __name__ == '__main__':
                 uploaded_file, computervision_client)
             results = utilities.sendToThings(textList)
 
-            if st.button("Completed conversion. Click to upload."):
-                for i in results:
-                    st.text(i)
+            st.text(
+                "Copy paste the links below into a browser to upload the todos to things.")
+            for i in results:
+                st.text(i)
