@@ -33,5 +33,4 @@ if __name__ == '__main__':
 
             if st.button("Completed conversion. Click to upload."):
                 for i in results:
-                    webbrowser.open(i)
-                st.text("Uploaded.")
+                    st.text(i)
